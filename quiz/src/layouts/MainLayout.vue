@@ -25,14 +25,21 @@ export default {
     };
   },
   mounted() {
+    //fetch("http://httpstat.us/500") //This is a super simple service for generating different HTTP codes.
     fetch("https://opentdb.com/api.php?amount=10&category=23&type=multiple", {
       method: "get"
     })
       .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
         return response.json();
       })
       .then(jsonData => {
         this.questions = jsonData.results;
+      })
+      .catch(e => {
+        console.log(e);
       });
   },
   methods: {
@@ -41,7 +48,6 @@ export default {
     },
     getVueVersion() {
       //var version = Number(Vue.version.split('.')[0]);
-      //window.console.log("version : " + Vue.version);
       return Vue.version;
     }
   }
